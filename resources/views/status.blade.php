@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Test API: статус</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <style>
         body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0;
             display: flex; align-items: center; justify-content: center; height: 100vh; }
@@ -22,28 +21,23 @@
     </style>
 </head>
 <body>
-<div id="app" class="card">
+<div class="card">
     <h1>Test API</h1>
-    <span class="badge" :class="status" v-text="status === 'ok' ? 'Работает' : 'Есть проблемы'"></span>
-    <ul>
-        <li v-for="(value, name) in checks" :key="name">
-            <span v-text="name"></span>
-            <span v-text="value === 'ok' ? '✅' : '❌'"></span>
-        </li>
-    </ul>
-    <small v-text="'Обновлено: ' + new Date(timestamp).toLocaleString('ru-RU')"></small>
-</div>
 
-<script>
-    Vue.createApp({
-        data() {
-            return {
-                status: @json($status),
-                checks: @json($checks),
-                timestamp: @json($timestamp),
-            };
-        },
-    }).mount('#app');
-</script>
+    <span class="badge {{ $status }}">
+            {{ $status === 'ok' ? 'Работает' : 'Есть проблемы' }}
+        </span>
+
+    <ul>
+        @foreach ($checks as $name => $value)
+            <li>
+                <span>{{ $name }}</span>
+                <span>{{ $value === 'ok' ? '✅' : '❌' }}</span>
+            </li>
+        @endforeach
+    </ul>
+
+    <small>Обновлено: {{ \Carbon\Carbon::parse($timestamp)->format('d.m.Y H:i:s') }}</small>
+</div>
 </body>
 </html>
