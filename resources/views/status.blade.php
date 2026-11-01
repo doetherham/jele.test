@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Test API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test API: статус</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; align-items: center;
-            justify-content: center; height: 100vh; margin: 0; background: #f5f5f5; }
-        .card { background: white; padding: 40px 60px; border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; }
+        body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0;
+            display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: #fff; padding: 40px 50px; border-radius: 14px; min-width: 320px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+        h1 { margin: 0 0 6px; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px;
+            color: #fff; font-weight: 600; margin-bottom: 20px; }
+        .ok { background: #22c55e; }
+        .degraded { background: #ef4444; }
+        ul { list-style: none; padding: 0; margin: 0 0 16px; }
+        li { display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid #eee; }
+        small { color: #888; }
     </style>
 </head>
 <body>
-<div class="card">
+<div id="app" class="card">
     <h1>Test API</h1>
-    <p id="status">Проверяем...</p>
+    <span class="badge" :class="status" v-text="status === 'ok' ? 'Работает' : 'Есть проблемы'"></span>
+    <ul>
+        <li v-for="(value, name) in checks" :key="name">
+            <span v-text="name"></span>
+            <span v-text="value === 'ok' ? '✅' : '❌'"></span>
+        </li>
+    </ul>
+    <small v-text="'Обновлено: ' + new Date(timestamp).toLocaleString('ru-RU')"></small>
 </div>
+
 <script>
-    fetch('/health')
-        .then(r => r.json())
-        .then(d => document.getElementById('status').textContent =
-            d.status === 'ok' ? 'Сервис работает ✅' : 'Есть проблемы ⚠️')
-        .catch(() => document.getElementById('status').textContent = 'Сервис недоступен ❌');
+    Vue.createApp({
+        data() {
+            return {
+                status: @json($status),
+                checks: @json($checks),
+                timestamp: @json($timestamp),
+            };
+        },
+    }).mount('#app');
 </script>
 </body>
 </html>

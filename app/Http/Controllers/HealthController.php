@@ -17,9 +17,9 @@ class HealthController extends Controller
 
         $healthy = !in_array('down', $checks, true);
 
-        return response()->json([
-            'status' => $healthy ? 'ok' : 'degraded',
-            'checks' => $checks,
+        return response()->view('status', [
+            'status'    => $healthy ? 'ok' : 'degraded',
+            'checks'    => $checks,
             'timestamp' => now()->toIso8601String(),
         ], $healthy ? 200 : 503);
     }
