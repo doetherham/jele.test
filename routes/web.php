@@ -4,4 +4,4 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HealthController;
 
-Route::get('/health', HealthController::class)->name('health');
+Route::get('/health', [HealthController::class, 'index'])->name('health');
